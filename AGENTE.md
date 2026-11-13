@@ -11,12 +11,15 @@ Trabaja siempre en la raíz del repositorio. Escribe todo en **español**.
 
 ## 1. Recoger candidatos de las bases de datos
 
-```bash
-python3 scripts/fetch.py
-```
+Una GitHub Action (`.github/workflows/recolectar.yml`) ejecuta cada día a las 06:30 UTC
+`scripts/fetch.py` con acceso libre a internet y sube `data/candidates.json` (ya deduplicado contra
+`data/seen.json` y con enlaces al texto completo), `data/fetch_report.json` y `data/fetch_date.txt`.
 
-Genera `data/candidates.json` (ya deduplicado contra `data/seen.json`). Lee el resumen que imprime:
-si una fuente falla, sigue con las demás y anótalo en el apartado "Incidencias" del email.
+1. Haz `git pull` para tener lo último.
+2. Si `data/fetch_date.txt` contiene la fecha de hoy (UTC), usa `data/candidates.json` tal cual y
+   lee `data/fetch_report.json` para anotar en "Incidencias" las fuentes que fallaron.
+3. Si no es de hoy (la Action falló o se retrasó), ejecuta tú `python3 scripts/fetch.py`. Si las
+   fuentes fallan por red, busca en PubMed (conector) y en la web, y anótalo en "Incidencias".
 
 ## 2. Búsqueda web complementaria (WebSearch / WebFetch)
 
