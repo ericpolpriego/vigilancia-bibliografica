@@ -1,0 +1,36 @@
+name: Recolectar candidatos
+
+on:
+  schedule:
+    - cron: "30 6 * * *"   # 06:30 UTC, antes de la rutina de Claude (07:30 UTC)
+  workflow_dispatch: {}      # botón "Run workflow" para lanzarlo a mano
+
+permissions:
+  contents: write
+
+concurrency:
+  group: recolectar
+  cancel-in-progress: false
+
+jobs:
+  recolectar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Buscar novedades en las bases de datos
+        env:
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+        run: |
+          python3 scripts/fetch.py | tee data/fetch_report.json
+          date -u +%Y-%m-%d > data/fetch_date.txt
+
+      - name: Guardar candidatos en el repositorio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/candidates.json data/fetch_report.json data/fetch_date.txt
+          git commit -m "Candidatos $(cat data/fetch_date.txt)" || echo "Sin cambios"
+          git pull --rebase
+          git push
