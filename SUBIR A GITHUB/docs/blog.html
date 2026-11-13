@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog semanal · Vigilancia científica</title>
+<meta name="description" content="Resumen semanal de la investigación en pedagogía no lineal, sistemas complejos, fútbol y aprendizaje motor.">
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--ink:#1d2321;--muted:#5f6b66;--line:#e3e1da;--acc:#1f6f50;--acc-soft:#e2f0e9;--star:#c08a16}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141816;--card:#1c211f;--ink:#e8ece9;--muted:#9aa6a0;--line:#2c3330;--acc:#5fc79a;--acc-soft:#1f3329;--star:#e0b040}}
+:root[data-theme="dark"]{--bg:#141816;--card:#1c211f;--ink:#e8ece9;--muted:#9aa6a0;--line:#2c3330;--acc:#5fc79a;--acc-soft:#1f3329;--star:#e0b040}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 Georgia,"Iowan Old Style","Times New Roman",serif}
+.wrap{max-width:760px;margin:auto;padding:0 16px}
+nav{font:14px system-ui,-apple-system,sans-serif;display:flex;gap:14px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+nav a{color:var(--muted);text-decoration:none}nav a.on,nav a:hover{color:var(--acc)}
+nav .sp{flex:1}
+.lang button{font:inherit;background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:2px 9px;cursor:pointer}
+.lang button.on{background:var(--acc-soft);color:var(--acc);border-color:var(--acc)}
+h1{font-size:32px;line-height:1.2;margin:34px 0 6px;letter-spacing:-.01em}
+.sub{color:var(--muted);font:15px system-ui,sans-serif;margin-bottom:26px}
+.post-list a{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.post-list a:hover{border-color:var(--acc)}
+.post-list h2{margin:0;font-size:20px}
+.post-list .m{color:var(--muted);font:13px system-ui,sans-serif;margin-top:4px}
+.post-list p{margin:8px 0 0;color:var(--muted)}
+article h2{font-size:22px;margin:30px 0 8px}
+article h3{font-size:18px;margin:22px 0 6px}
+article a{color:var(--acc)}
+article blockquote{margin:16px 0;padding:8px 16px;border-left:3px solid var(--acc);background:var(--acc-soft);border-radius:0 8px 8px 0}
+article ul{padding-left:22px}
+.meta{color:var(--muted);font:14px system-ui,sans-serif}
+.back{font:14px system-ui,sans-serif;color:var(--muted);text-decoration:none;display:inline-block;margin-top:24px}
+footer{color:var(--muted);font:13px system-ui,sans-serif;padding:40px 0 60px;border-top:1px solid var(--line);margin-top:40px}
+.empty{color:var(--muted);text-align:center;padding:50px 0;font-family:system-ui,sans-serif}
+@media (max-width:600px){h1{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a href="./">Biblioteca</a>
+    <a href="blog.html" class="on">Blog semanal</a>
+    <span class="sp"></span>
+    <span class="lang"><button data-l="es">ES</button> <button data-l="en">EN</button></span>
+  </nav>
+  <main id="main"></main>
+  <footer id="foot"></footer>
+</div>
+<script>
+const L={es:{title:"Blog semanal",sub:"Lo más relevante de cada semana en pedagogía no lineal, sistemas complejos, fútbol y aprendizaje motor.",back:"← Todos los posts",empty:"El primer post se publicará el próximo lunes.",items:"publicaciones revisadas",foot:"Vigilancia científica · Resúmenes propios con enlace a las fuentes originales."},
+         en:{title:"Weekly blog",sub:"The most relevant research of the week on nonlinear pedagogy, complex systems, football and motor learning.",back:"← All posts",empty:"The first post will be published next Monday.",items:"publications reviewed",foot:"Scientific watch · Original summaries linking to the primary sources."}};
+let lang="es";try{lang=localStorage.getItem("vb_lang")||(navigator.language||"es").slice(0,2)}catch(e){}
+if(!L[lang])lang="es";
+let posts=[];
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=d=>new Date(d+"T12:00").toLocaleDateString(lang==="es"?"es-ES":"en-GB",{day:"numeric",month:"long",year:"numeric"});
+function render(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===lang));
+  const t=L[lang],slug=new URLSearchParams(location.search).get("p"),main=document.getElementById("main");
+  document.getElementById("foot").textContent=t.foot;
+  const p=slug&&posts.find(x=>x.slug===slug);
+  if(p){const v=p[lang]||p.es;document.title=v.title+" · Vigilancia científica";
+    main.innerHTML=`<h1>${esc(v.title)}</h1><div class="meta">${fmt(p.date)} · ${fmt(p.period_start)} – ${fmt(p.period_end)} · ${p.n_items||0} ${t.items}</div><article>${v.html}</article><a class="back" href="blog.html">${t.back}</a>`;
+    window.scrollTo(0,0);return}
+  document.title=t.title+" · Vigilancia científica";
+  main.innerHTML=`<h1>${t.title}</h1><div class="sub">${t.sub}</div>`+(posts.length?`<div class="post-list">${posts.map(p=>{const v=p[lang]||p.es;return`<a href="?p=${encodeURIComponent(p.slug)}"><h2>${esc(v.title)}</h2><div class="m">${fmt(p.date)} · ${p.n_items||0} ${t.items}</div><p>${esc(v.excerpt)}</p></a>`}).join("")}</div>`:`<div class="empty">${t.empty}</div>`);
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;try{localStorage.setItem("vb_lang",lang)}catch(e){}render()});
+window.addEventListener("popstate",render);
+fetch("posts.json",{cache:"no-store"}).then(r=>r.ok?r.json():[]).catch(()=>[]).then(d=>{posts=(d||[]).sort((a,b)=>b.date.localeCompare(a.date));render()});
+</script>
+</body>
+</html>
