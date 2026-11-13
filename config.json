@@ -1,0 +1,330 @@
+{
+  "lookback_days": 4,
+  "languages": [
+    "en",
+    "es",
+    "pt",
+    "ca"
+  ],
+  "topics": {
+    "pedagogia_no_lineal": {
+      "label": "Pedagogía no lineal / CLA",
+      "queries": [
+        "\"nonlinear pedagogy\"",
+        "\"non-linear pedagogy\"",
+        "\"constraints-led approach\"",
+        "\"constraint-led approach\"",
+        "\"ecological dynamics\" sport",
+        "\"representative learning design\"",
+        "\"representative design\" sport",
+        "affordances sport skill",
+        "\"Athletic Skills Model\"",
+        "\"pedagogía no lineal\"",
+        "\"dinámica ecológica\" deporte",
+        "\"pedagogia não linear\"",
+        "\"dinâmica ecológica\" desporto",
+        "\"pedagogia no lineal\"",
+        "\"differential learning\" sport"
+      ]
+    },
+    "sistemas_complejos": {
+      "label": "Sistemas complejos en deporte",
+      "queries": [
+        "\"complex systems\" sport team",
+        "\"dynamical systems\" sport performance",
+        "\"complex adaptive systems\" sport",
+        "\"interpersonal coordination\" team sport",
+        "\"self-organization\" team sport",
+        "metastability sport",
+        "\"network analysis\" football passing",
+        "\"sistemas complejos\" deporte",
+        "\"sistemas dinámicos\" fútbol",
+        "\"sistemas complexos\" desporto",
+        "\"sistemes complexos\" esport",
+        "synergies team sports coordination"
+      ]
+    },
+    "futbol": {
+      "label": "Fútbol: entrenamiento y táctica",
+      "queries": [
+        "\"small-sided games\" football",
+        "\"small-sided games\" soccer",
+        "\"tactical periodization\"",
+        "\"periodización táctica\"",
+        "\"periodização tática\"",
+        "soccer tactical behaviour positional data",
+        "football tracking data collective behaviour",
+        "\"juegos reducidos\" fútbol",
+        "\"jogos reduzidos\" futebol",
+        "football training task design",
+        "\"tactical performance\" soccer",
+        "\"match analysis\" football tactical"
+      ]
+    },
+    "aprendizaje_talento": {
+      "label": "Aprendizaje motor y talento",
+      "queries": [
+        "\"skill acquisition\" sport",
+        "\"motor learning\" football",
+        "\"talent development\" football",
+        "\"talent development\" soccer",
+        "\"decision-making\" football players perception",
+        "\"perception-action\" sport",
+        "\"aprendizaje motor\" fútbol",
+        "\"desarrollo del talento\" deporte",
+        "\"desenvolvimento de talentos\" futebol",
+        "\"youth football\" development learning",
+        "\"game-based\" coaching football"
+      ]
+    }
+  },
+  "authors": [
+    "Keith Davids",
+    "Duarte Araújo",
+    "Jia Yi Chow",
+    "Ian Renshaw",
+    "Chris Button",
+    "Martyn Rothwell",
+    "Ludovic Seifert",
+    "Pedro Passos",
+    "Bruno Gonçalves",
+    "Jaime Sampaio",
+    "Angel Ric",
+    "Carlota Torrents",
+    "Robert Hristovski",
+    "Natàlia Balagué",
+    "Robert Rein",
+    "Ricardo Duarte",
+    "Pedro Esteves",
+    "Rob Gray",
+    "Brendan Moy",
+    "Will Roberts",
+    "Jorge Ibáñez",
+    "Sergio Lara-Bercial",
+    "Paul Larkin",
+    "Damian Farrow",
+    "Ana Tavares",
+    "Júlio Garganta",
+    "Filipe Clemente",
+    "José Afonso",
+    "Isabel Mesquita",
+    "Daniel Memmert",
+    "Ruud Meerhoff",
+    "Geert Savelsbergh",
+    "Rodrigo Aquino",
+    "Vicente Luis del Campo",
+    "Sixto González-Víllora"
+  ],
+  "journals": {
+    "Journal of Sports Sciences": [
+      "0264-0414",
+      "1466-447X"
+    ],
+    "Science and Medicine in Football": [
+      "2473-3938",
+      "2473-4446"
+    ],
+    "Psychology of Sport and Exercise": [
+      "1469-0292",
+      "1878-5476"
+    ],
+    "International Journal of Sports Science & Coaching": [
+      "1747-9541",
+      "2048-397X"
+    ],
+    "International Journal of Sport Psychology": [
+      "0047-0767"
+    ],
+    "Sports Medicine": [
+      "0112-1642",
+      "1179-2035"
+    ],
+    "Sports Medicine - Open": [
+      "2198-9761"
+    ],
+    "Human Movement Science": [
+      "0167-9457",
+      "1872-7646"
+    ],
+    "Journal of Motor Learning and Development": [
+      "2325-3193",
+      "2325-3215"
+    ],
+    "Physical Education and Sport Pedagogy": [
+      "1740-8989",
+      "1742-5786"
+    ],
+    "Sport, Education and Society": [
+      "1357-3322",
+      "1470-1243"
+    ],
+    "International Journal of Performance Analysis in Sport": [
+      "2474-8668",
+      "1474-8185"
+    ],
+    "Movement & Sport Sciences - Science & Motricité": [
+      "2118-5743"
+    ],
+    "Frontiers in Psychology": [
+      "1664-1078"
+    ],
+    "Frontiers in Sports and Active Living": [
+      "2624-9367"
+    ],
+    "PLOS ONE": [
+      "1932-6203"
+    ],
+    "Journal of Human Kinetics": [
+      "1640-5544",
+      "1899-7562"
+    ],
+    "Biology of Sport": [
+      "0860-021X",
+      "2083-1862"
+    ],
+    "Apunts. Educación Física y Deportes": [
+      "1577-4015",
+      "2014-0983"
+    ],
+    "RICYDE. Revista Internacional de Ciencias del Deporte": [
+      "1885-3137"
+    ],
+    "Cultura, Ciencia y Deporte": [
+      "1696-5043",
+      "1989-7413"
+    ],
+    "Retos": [
+      "1579-1726",
+      "1988-2041"
+    ],
+    "E-balonmano / Journal of Sport Science (RIPED)": [
+      "1885-7019"
+    ],
+    "Revista de Psicología del Deporte": [
+      "1132-239X",
+      "1988-5636"
+    ],
+    "Motricidade": [
+      "1646-107X",
+      "2182-2972"
+    ],
+    "Revista Brasileira de Ciências do Esporte": [
+      "0101-3289",
+      "2179-3255"
+    ]
+  },
+  "news_queries": [
+    "\"pedagogía no lineal\"",
+    "\"nonlinear pedagogy\"",
+    "\"constraints-led approach\"",
+    "\"ecological dynamics\" coaching",
+    "\"periodización táctica\"",
+    "\"periodização tática\"",
+    "\"sistemas complejos\" fútbol entrenamiento",
+    "\"juegos reducidos\" fútbol metodología"
+  ],
+  "rss_feeds": {
+    "Perception & Action (Rob Gray) podcast": "https://perceptionaction.com/feed/"
+  },
+  "concept_terms": [
+    "nonlinear",
+    "non-linear",
+    "no lineal",
+    "não linear",
+    "no-lineal",
+    "constraint",
+    "restricci",
+    "constrangimento",
+    "ecological dynamic",
+    "dinámica ecológica",
+    "dinâmica ecológica",
+    "affordance",
+    "representative",
+    "representativ",
+    "complex system",
+    "complex adaptive",
+    "sistemas complej",
+    "sistemas complex",
+    "sistemes complex",
+    "dynamical system",
+    "sistemas dinámic",
+    "self-organi",
+    "auto-organi",
+    "autoorgani",
+    "metastab",
+    "coordination",
+    "coordinación",
+    "coordenação",
+    "synerg",
+    "sinergi",
+    "network analysis",
+    "passing network",
+    "small-sided",
+    "juegos reducidos",
+    "jogos reduzidos",
+    "tactic",
+    "táctic",
+    "tátic",
+    "skill acquisition",
+    "motor learning",
+    "aprendizaje motor",
+    "aprendizagem motora",
+    "learning design",
+    "practice design",
+    "task design",
+    "diseño de tareas",
+    "talent",
+    "talento",
+    "decision-making",
+    "toma de decisi",
+    "tomada de decis",
+    "perception-action",
+    "perceptual",
+    "percepción",
+    "percepção",
+    "pedagog",
+    "game-based",
+    "teaching games",
+    "tgfu",
+    "variability",
+    "variabilidad",
+    "variabilidade",
+    "differential learning",
+    "periodiz",
+    "collective behav",
+    "comportamiento colectivo",
+    "comportamento coletivo",
+    "positional data",
+    "tracking data",
+    "athletic skills model",
+    "coach education",
+    "formación de entrenadores",
+    "player development",
+    "desarrollo del jugador"
+  ],
+  "sport_terms": [
+    "football",
+    "soccer",
+    "fútbol",
+    "futbol",
+    "futebol",
+    "sport",
+    "deport",
+    "desport",
+    "esport",
+    "athlet",
+    "atleta",
+    "coach",
+    "entrenad",
+    "treinad",
+    "player",
+    "jugador",
+    "jogador",
+    "team game",
+    "physical education",
+    "educación física",
+    "educação física",
+    "educació física",
+    "futsal"
+  ]
+}
