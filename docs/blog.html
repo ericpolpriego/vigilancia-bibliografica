@@ -31,6 +31,7 @@ article blockquote{margin:16px 0;padding:8px 16px;border-left:3px solid var(--ac
 article ul{padding-left:22px}
 .meta{color:var(--muted);font:14px system-ui,sans-serif}
 .back{font:14px system-ui,sans-serif;color:var(--muted);text-decoration:none;display:inline-block;margin-top:24px}
+.draft{margin-top:24px;background:#fdf3e1;color:#8a5a00;border:1px solid #e9cf9c;border-radius:8px;padding:8px 12px;font:600 14px system-ui,sans-serif}
 footer{color:var(--muted);font:13px system-ui,sans-serif;padding:40px 0 60px;border-top:1px solid var(--line);margin-top:40px}
 .empty{color:var(--muted);text-align:center;padding:50px 0;font-family:system-ui,sans-serif}
 @media (max-width:600px){h1{font-size:26px}}
@@ -60,12 +61,14 @@ function render(){
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===lang));
   const t=L[lang],slug=new URLSearchParams(location.search).get("p"),main=document.getElementById("main");
   document.getElementById("foot").textContent=t.foot;
-  const p=slug&&posts.find(x=>x.slug===slug);
+  const prev=new URLSearchParams(location.search).get("borrador")==="1";
+  const isPub=x=>!x.status||x.status==="published";
+  const p=slug&&posts.find(x=>x.slug===slug&&(isPub(x)||prev));
   if(p){const v=p[lang]||p.es;document.title=v.title+" · Vigilancia científica";
-    main.innerHTML=`<h1>${esc(v.title)}</h1><div class="meta">${fmt(p.date)} · ${fmt(p.period_start)} – ${fmt(p.period_end)} · ${p.n_items||0} ${t.items}</div><article>${v.html}</article><a class="back" href="blog.html">${t.back}</a>`;
+    main.innerHTML=(isPub(p)?"":`<div class="draft">${lang==="es"?"BORRADOR · no publicado. Vista previa para revisión.":"DRAFT · not published. Preview for review."}</div>`)+`<h1>${esc(v.title)}</h1><div class="meta">${fmt(p.date)} · ${fmt(p.period_start)} – ${fmt(p.period_end)} · ${p.n_items||0} ${t.items}</div><article>${v.html}</article><a class="back" href="blog.html">${t.back}</a>`;
     window.scrollTo(0,0);return}
   document.title=t.title+" · Vigilancia científica";
-  main.innerHTML=`<h1>${t.title}</h1><div class="sub">${t.sub}</div>`+(posts.length?`<div class="post-list">${posts.map(p=>{const v=p[lang]||p.es;return`<a href="?p=${encodeURIComponent(p.slug)}"><h2>${esc(v.title)}</h2><div class="m">${fmt(p.date)} · ${p.n_items||0} ${t.items}</div><p>${esc(v.excerpt)}</p></a>`}).join("")}</div>`:`<div class="empty">${t.empty}</div>`);
+  main.innerHTML=`<h1>${t.title}</h1><div class="sub">${t.sub}</div>`+(posts.filter(isPub).length?`<div class="post-list">${posts.filter(isPub).map(p=>{const v=p[lang]||p.es;return`<a href="?p=${encodeURIComponent(p.slug)}"><h2>${esc(v.title)}</h2><div class="m">${fmt(p.date)} · ${p.n_items||0} ${t.items}</div><p>${esc(v.excerpt)}</p></a>`}).join("")}</div>`:`<div class="empty">${t.empty}</div>`);
 }
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;try{localStorage.setItem("vb_lang",lang)}catch(e){}render()});
 window.addEventListener("popstate",render);

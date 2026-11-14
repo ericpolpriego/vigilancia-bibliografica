@@ -197,7 +197,11 @@ def main():
     if dest:
         body.append(seccion("⭐ Destacados", "Relevancia alta para tu línea · ficha completa", "".join(tarjeta(x) for x in dest)))
     if medio:
-        body.append(seccion("📌 Relevantes", "Relacionados con tus temas · ficha completa", "".join(tarjeta(x) for x in medio)))
+        # Gmail recorta los emails de más de ~100 KB: si hay muchos ítems, los relevantes van en formato breve
+        completa = len(dest) * 4500 + len(medio) * 4500 < 70000
+        body.append(seccion("📌 Relevantes",
+                            "Relacionados con tus temas · " + ("ficha completa" if completa else "resumen breve (ficha completa en la web)"),
+                            "".join(tarjeta(x, completa=completa) for x in medio)))
     if ojear:
         body.append(seccion("👀 Para ojear", "Tangenciales pero potencialmente útiles",
                             f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(linea(x) for x in ojear)}</table>'))
@@ -225,6 +229,8 @@ def main():
            f'<div style="font-size:13px;color:{C["muted"]};margin-top:4px">Pedagogía no lineal · Sistemas complejos · Fútbol · Aprendizaje y talento</div>'
            + "".join(body) + pie + '</div></div>')
 
+    if len(out.encode("utf-8")) > 98000:
+        print("AVISO: el email supera ~98 KB; Gmail puede recortarlo. Revisa el número de destacados.")
     (ROOT / "data" / "email.html").write_text(out, encoding="utf-8")
     (ROOT / "data" / "email_subject.txt").write_text(subject, encoding="utf-8")
     print(subject)

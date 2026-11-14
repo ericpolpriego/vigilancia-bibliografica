@@ -140,6 +140,12 @@ def openalex(since):
         if key:
             params["api_key"] = key
         js = get_json(base + "?" + urllib.parse.urlencode(params))
+        if js is None and "api_key" in params:
+            # clave rechazada (401) o fallo puntual: reintenta sin clave con el cupo gratuito
+            params.pop("api_key")
+            js = get_json(base + "?" + urllib.parse.urlencode(params))
+            if js is not None:
+                errors.append("OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave")
         n = 0
         for w in (js or {}).get("results", []):
             it = oa_item(w, hint)
