@@ -42,6 +42,13 @@ main{max-width:1080px;margin:auto;padding:12px 16px 60px}
 .ft.closed{color:var(--ink)}
 .ft.alt{color:var(--muted)}
 .ft:hover{filter:brightness(1.08)}
+.pub{font-size:13px;margin-top:4px}
+.ficha{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.ficha summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--acc)}
+.ficha .src{color:var(--muted);font-weight:400}
+.ficha dl{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;margin:10px 0 0;font-size:14px}
+.ficha dt{font-weight:600}.ficha dd{margin:0}
+@media (max-width:600px){.ficha dl{grid-template-columns:1fr}.ficha dd{margin-bottom:6px}}
 .empty{color:var(--muted);text-align:center;padding:60px 0}
 @media (max-width:600px){h1{font-size:22px}.top{flex-wrap:wrap}}
 </style>
@@ -64,6 +71,7 @@ main{max-width:1080px;margin:auto;padding:12px 16px 60px}
     <option value="event">Seminarios / congresos</option><option value="news">Noticias</option></select>
   <select id="lang"><option value="">Idiomas</option><option>en</option><option>es</option><option>pt</option><option>ca</option></select>
   <select id="rel"><option value="1">★ todos</option><option value="3">★★★+</option><option value="4">★★★★+</option><option value="5">★★★★★</option></select>
+  <select id="sort"><option value="found">Orden: recién encontrados</option><option value="pub">Orden: fecha de publicación</option><option value="rel">Orden: relevancia</option></select>
   <button id="fav">☆ Favoritos</button>
   <button id="unread">Sin leer</button>
   <button id="bib">⬇ BibTeX</button>
@@ -92,21 +100,29 @@ function ftLinks(it){
   const sch=isDoc&&!it.oa&&it.scholar_url?`<a class="ft alt" href="${esc(it.scholar_url)}" target="_blank" rel="noopener">🔎 Buscar versión gratuita</a>`:"";
   return `<div class="fts">${main}${sch}</div>`;
 }
+const MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+function fdate(d){if(!d)return"";const p=String(d).slice(0,10).split("-");if(p.length===3)return`${+p[2]} ${MES[+p[1]-1]} ${p[0]}`;if(p.length===2)return`${MES[+p[1]-1]} ${p[0]}`;return p[0]}
+const FICHA=[["objective","🎯 Objetivo"],["design","🧪 Diseño"],["population","👥 Muestra"],["method","⚙️ Método"],["results","📊 Resultados"],["conclusions","✅ Conclusiones"],["limitations","⚠️ Limitaciones"]];
+function ficha(it){const rows=FICHA.filter(([k])=>it[k]&&it[k]!=="—").map(([k,l])=>`<dt>${l}</dt><dd>${esc(it[k])}</dd>`).join("");
+  if(!rows)return"";return`<details class="ficha"><summary>Ver ficha del estudio${it.analysis_source?` <span class="src">· basada en ${esc(it.analysis_source)}</span>`:""}</summary><dl>${rows}</dl></details>`}
 function render(){
-  const list=filtered();
+  const srt=$("sort").value;
+  const list=filtered().slice().sort((a,b)=>srt==="pub"?String(b.date||"").localeCompare(String(a.date||"")):srt==="rel"?(b.relevance||0)-(a.relevance||0):String(b.found||"").localeCompare(String(a.found||""))||(b.relevance||0)-(a.relevance||0));
   $("stats").textContent=`${list.length} de ${items.length} ítems · ${Object.keys(favs).length} favoritos`;
   if(!list.length){$("list").innerHTML=`<div class="empty">${items.length?"Nada coincide con los filtros.":"Aún no hay ítems: la primera ejecución diaria los añadirá."}</div>`;return}
   let html="",day="";
   for(const it of list){
-    if(it.found!==day){day=it.found;html+=`<div class="day">${new Date(day+"T12:00").toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div>`}
+    if(srt==="found"&&it.found!==day){day=it.found;html+=`<div class="day">${new Date(day+"T12:00").toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div>`}
     const au=(it.authors||[]);const auS=au.slice(0,3).join(", ")+(au.length>3?" et al.":"");
     const ev=it.type==="event"&&it.event_date?` · 📅 ${esc(it.event_date)}${it.location?" · "+esc(it.location):""}`:"";
     html+=`<article class="card ${read[it.id]?"read":""}"><div class="top">
       <a class="title" href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title)}</a>
       <span class="stars" title="Relevancia">${"★".repeat(it.relevance||0)}</span>
       <span class="act"><button data-f="${esc(it.id)}" title="Favorito">${favs[it.id]?"★":"☆"}</button><button data-r="${esc(it.id)}" title="Marcar leído">${read[it.id]?"↺":"✓"}</button></span></div>
-      <div class="meta">${esc(auS)}${auS&&it.venue?" — ":""}<i>${esc(it.venue)}</i>${it.date?" · "+esc(it.date):""}${ev}</div>
+      <div class="pub">📅 ${it.type==="event"&&it.event_date?`Evento: <b>${fdate(it.event_date)}</b>${it.location?" · 📍 "+esc(it.location):""}`:`Publicado: <b>${it.date?fdate(it.date):"fecha no disponible"}</b>`}</div>
+      <div class="meta">${esc(auS)}${auS&&it.venue?" — ":""}<i>${esc(it.venue)}</i></div>
       ${it.summary?`<p class="sum">${esc(it.summary)}</p>`:""}
+      ${ficha(it)}
       ${it.why?`<p class="why"><b>Por qué importa:</b> ${esc(it.why)}</p>`:""}
       ${it.practice&&it.practice!=="—"?`<p class="why"><b>Aplicación práctica:</b> ${esc(it.practice)}</p>`:""}
       ${ftLinks(it)}
@@ -120,7 +136,7 @@ document.addEventListener("click",e=>{
   if(f){const id=f.dataset.f;favs[id]?delete favs[id]:favs[id]=1;store.set("vb_fav",favs);render()}
   if(r){const id=r.dataset.r;read[id]?delete read[id]:read[id]=1;store.set("vb_read",read);render()}
 });
-["q","topic","type","lang","rel"].forEach(id=>$(id).addEventListener("input",render));
+["q","topic","type","lang","rel","sort"].forEach(id=>$(id).addEventListener("input",render));
 $("fav").onclick=()=>{onlyFav=!onlyFav;$("fav").classList.toggle("on",onlyFav);render()};
 $("unread").onclick=()=>{onlyUnread=!onlyUnread;$("unread").classList.toggle("on",onlyUnread);render()};
 $("bib").onclick=()=>{location.href="biblioteca.bib"};
