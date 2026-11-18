@@ -1,19 +1,19 @@
 {
- "since": "2026-11-13",
+ "since": "2026-11-14",
  "por_fuente": {
   "openalex": 7,
-  "crossref": 21,
-  "pubmed": 3,
+  "crossref": 32,
+  "pubmed": 1,
   "arxiv": 0,
-  "sportrxiv": 1,
-  "news": 2
+  "sportrxiv": 3,
+  "news": 3
  },
  "candidatos_nuevos": 0,
  "errores": [
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22nonlinear+pedagogy%22%29+OR+%28%22non-linear+ped -> HTTP Error 401: Unauthorized",
   "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22Athletic+Skills+Model%22%29+OR+%28%22pedagog%C3% -> HTTP Error 401: Unauthorized",
-  "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22Athletic+Skills+Model%22%29+OR+%28%22pedagog%C3% -> HTTP Error 429: Too Many Requests",
+  "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22complex+systems%22+sport+team%29+OR+%28%22dynami -> HTTP Error 401: Unauthorized",
   "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22sistemas+din%C3%A1micos%22+f%C3%BAtbol%29+OR+%28 -> HTTP Error 401: Unauthorized",
