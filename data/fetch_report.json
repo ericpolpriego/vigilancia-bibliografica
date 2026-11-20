@@ -1,23 +1,23 @@
 {
- "since": "2026-11-15",
+ "since": "2026-11-16",
  "por_fuente": {
-  "openalex": 9,
-  "crossref": 37,
-  "pubmed": 2,
+  "openalex": 15,
+  "crossref": 48,
+  "pubmed": 5,
   "arxiv": 0,
   "sportrxiv": 2,
-  "news": 3
+  "news": 4
  },
  "candidatos_nuevos": 0,
  "errores": [
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22nonlinear+pedagogy%22%29+OR+%28%22non-linear+ped -> HTTP Error 401: Unauthorized",
   "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22Athletic+Skills+Model%22%29+OR+%28%22pedagog%C3% -> HTTP Error 401: Unauthorized",
-  "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
+  "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22Athletic+Skills+Model%22%29+OR+%28%22pedagog%C3% -> HTTP Error 429: Too Many Requests",
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22complex+systems%22+sport+team%29+OR+%28%22dynami -> HTTP Error 401: Unauthorized",
-  "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22complex+systems%22+sport+team%29+OR+%28%22dynami -> HTTP Error 429: Too Many Requests",
+  "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22sistemas+din%C3%A1micos%22+f%C3%BAtbol%29+OR+%28 -> HTTP Error 401: Unauthorized",
-  "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22sistemas+din%C3%A1micos%22+f%C3%BAtbol%29+OR+%28 -> HTTP Error 429: Too Many Requests",
+  "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22small-sided+games%22+football%29+OR+%28%22small- -> HTTP Error 401: Unauthorized",
   "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22jogos+reduzidos%22+futebol%29+OR+%28football+tra -> HTTP Error 401: Unauthorized",
@@ -29,6 +29,6 @@
   "https://api.openalex.org/works?filter=raw_author_name.search%3AKeith+Davids%7CDuarte+Ara%C3%BAjo%7CJia+Yi+Chow%7CIan+Ren -> HTTP Error 401: Unauthorized",
   "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
   "https://api.openalex.org/works?filter=raw_author_name.search%3AAngel+Ric%7CCarlota+Torrents%7CRobert+Hristovski%7CNat%C3 -> HTTP Error 401: Unauthorized",
-  "https://api.openalex.org/works?filter=raw_author_name.search%3AAngel+Ric%7CCarlota+Torrents%7CRobert+Hristovski%7CNat%C3 -> HTTP Error 429: Too Many Requests"
+  "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave"
  ]
 }
