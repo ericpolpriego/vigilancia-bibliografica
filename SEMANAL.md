@@ -20,6 +20,15 @@ Trabaja en la raíz del repositorio.
   conste; dilo con prudencia ("aún sin resultados publicados", "protocolo").
 - Si hay menos de 3 ítems, escribe igualmente un post breve ("semana tranquila").
 
+**Prioridad temática (obligatoria).** El blog es sobre pedagogía no lineal, dinámica ecológica,
+sistemas complejos y fútbol. Elige los trabajos de "Lo más destacado" en este orden:
+1. relevance 5 y 4 con `pedagogia_no_lineal` o `sistemas_complejos` en `topics`;
+2. relevance 5 y 4 de `futbol` o `aprendizaje_talento` con implicaciones para el diseño de tareas;
+3. solo si faltan, trabajos de relevance 3.
+El hilo conductor y el título deben salir de esos trabajos centrales, nunca de los periféricos
+(otros deportes, tests físicos, gestión). Los ítems de relevance 2 no aparecen en el post. Si la
+semana tiene poco del núcleo, dilo con naturalidad y apóyate en la Agenda y en libros/tesis.
+
 ## 2. Escribir el post (español e inglés)
 
 **Público:** mixto, investigadores y entrenadores/metodólogos. Tono riguroso pero accesible, sin jerga

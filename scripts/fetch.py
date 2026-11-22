@@ -159,6 +159,13 @@ def openalex(since):
         for i in range(0, len(qs), 8):  # 8 términos por llamada
             q = " OR ".join(f"({x})" for x in qs[i:i + 8])
             call(f"title_and_abstract.search:{q},from_publication_date:{since},language:{langs}", f"tema:{tkey}")
+    # Bloque específico en español, portugués y catalán: búsqueda amplia por deporte y filtro local
+    # por conceptos (OpenAlex indexa SciELO, Dialnet, Redalyc y repositorios de la península).
+    iber = CONFIG.get("iberian_queries", [])
+    for i in range(0, len(iber), 10):
+        q = " OR ".join(f"({x})" for x in iber[i:i + 10])
+        call(f"title_and_abstract.search:{q},from_publication_date:{since},language:es|pt|ca",
+             "es/pt/ca", per=200, check=True)
     names = CONFIG["authors"]
     for i in range(0, len(names), 10):
         call(f"raw_author_name.search:{'|'.join(names[i:i + 10])},from_publication_date:{since}",
@@ -175,14 +182,15 @@ def crossref(since):
         jname, issn = job
         res = []
         params = {"filter": f"issn:{issn},from-created-date:{since}", "rows": "300",
-                  "select": "DOI,title,author,container-title,abstract,published,URL,type"}
+                  "select": "DOI,title,author,container-title,abstract,published,published-online,created,URL,type"}
         js = get_json("https://api.crossref.org/works?" + urllib.parse.urlencode(params), timeout=45)
         for w in ((js or {}).get("message") or {}).get("items", []):
             title = " ".join(w.get("title") or [])
             abstract = w.get("abstract", "")
             if not relevant(title + " " + abstract + " " + jname):
                 continue
-            parts = ((w.get("published") or {}).get("date-parts") or [[None]])[0]
+            src_date = w.get("published-online") or w.get("created") or w.get("published") or {}
+            parts = (src_date.get("date-parts") or [[None]])[0]
             date = "-".join(f"{p:02d}" if i else str(p) for i, p in enumerate(parts) if p)
             authors = [f"{a.get('given', '')} {a.get('family', '')}".strip() for a in w.get("author", [])]
             res.append(item("Crossref", title, w.get("URL"), date, authors, jname, abstract,
@@ -326,9 +334,14 @@ def main():
         except Exception as e:  # una fuente caída no debe tumbar el resto
             errors.append(f"{fn.__name__}: {e!r}")
 
+    limite = (dt.date.today() - dt.timedelta(days=CONFIG.get("novelty_days", 60))).isoformat()
+    descartados_antiguos = 0
     merged, index = {}, {}
     for it in collected:
         if not it["title"]:
+            continue
+        if it["type"] in ("article", "preprint") and len(it["date"]) == 10 and it["date"] < limite:
+            descartados_antiguos += 1
             continue
         keys = {it["id"], f"t:{norm_title(it['title'])}"}
         if (keys | {f"u:{it['url']}"}) & seen:
@@ -351,6 +364,7 @@ def main():
     from fulltext import enrich
     cands = enrich(cands)
     (DATA / "candidates.json").write_text(json.dumps(cands, ensure_ascii=False, indent=1), encoding="utf-8")
+    stats["descartados_por_antiguedad"] = descartados_antiguos
     print(json.dumps({"since": since, "por_fuente": stats, "candidatos_nuevos": len(cands),
                       "errores": errors[:20]}, ensure_ascii=False, indent=1))
 

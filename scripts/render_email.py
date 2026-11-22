@@ -2,7 +2,8 @@
 """Genera el email diario (data/email.html y data/email_subject.txt) con una plantilla fija.
 
 Lee los ítems de docs/items.json cuyo `found` sea hoy (o --fecha AAAA-MM-DD) y los ordena:
-resumen → Destacados (4-5) → Relevantes (3) → Para ojear (2) → Libros y tesis → Eventos → Noticias.
+resumen → Destacados (4-5) → Relevantes (3) → Libros y tesis → Agenda (próximos eventos) → Noticias.
+Los ítems tangenciales (★2) no van en el email: solo se cuentan y quedan en la web.
 HTML con tablas y estilos en línea para que se vea bien en Gmail (web y móvil).
 """
 import argparse
@@ -168,9 +169,13 @@ def main():
     dest = sorted([x for x in doc if (x.get("relevance") or 0) >= 4], key=rel)
     medio = [x for x in doc if (x.get("relevance") or 0) == 3]
     ojear = [x for x in doc if (x.get("relevance") or 0) <= 2]
-    libros = sorted([x for x in hoy_items if x.get("type") in ("book", "thesis")], key=rel)
+    libros = sorted([x for x in hoy_items if x.get("type") in ("book", "thesis") and (x.get("relevance") or 0) >= 3], key=rel)
+    ojear += [x for x in hoy_items if x.get("type") in ("book", "thesis", "news") and (x.get("relevance") or 0) <= 2]
+    # Agenda permanente: todos los eventos futuros del archivo (no solo los de hoy)
+    agenda = sorted([x for x in items if x.get("type") == "event" and (x.get("event_date") or "") >= a.fecha],
+                    key=lambda x: x.get("event_date"))[:6]
     eventos = sorted([x for x in hoy_items if x.get("type") == "event"], key=lambda x: x.get("event_date") or "9999")
-    noticias = sorted([x for x in hoy_items if x.get("type") == "news"], key=rel)
+    noticias = sorted([x for x in hoy_items if x.get("type") == "news" and (x.get("relevance") or 0) >= 3], key=rel)
 
     n = len(hoy_items)
     subject = (f"📚 Vigilancia científica · {fecha(a.fecha)} · {n} novedades ({len(dest)} destacadas)"
@@ -181,8 +186,8 @@ def main():
         f'<td style="padding:0 6px 0 0"><div style="background:{C["card"]};border:1px solid {C["line"]};border-radius:10px;'
         f'padding:8px 12px;text-align:center"><div style="font-size:20px;font-weight:700;color:{C["acc"]}">{v}</div>'
         f'<div style="font-size:11px;color:{C["muted"]}">{k}</div></div></td>'
-        for k, v in [("Destacados", len(dest)), ("Relevantes", len(medio)), ("Para ojear", len(ojear)),
-                     ("Libros/tesis", len(libros)), ("Eventos", len(eventos)), ("Noticias", len(noticias))] if v)
+        for k, v in [("Destacados", len(dest)), ("Relevantes", len(medio)), ("Libros/tesis", len(libros)),
+                     ("Eventos nuevos", len(eventos)), ("Noticias", len(noticias)), ("Solo en la web", len(ojear))] if v)
     indice = "".join(f'<li style="margin:2px 0">{e(x.get("title"))}</li>' for x in dest + medio)
 
     body = []
@@ -202,16 +207,21 @@ def main():
         body.append(seccion("📌 Relevantes",
                             "Relacionados con tus temas · " + ("ficha completa" if completa else "resumen breve (ficha completa en la web)"),
                             "".join(tarjeta(x, completa=completa) for x in medio)))
-    if ojear:
-        body.append(seccion("👀 Para ojear", "Tangenciales pero potencialmente útiles",
-                            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(linea(x) for x in ojear)}</table>'))
     if libros:
         body.append(seccion("📘 Libros y tesis", "", "".join(tarjeta(x) for x in libros)))
-    if eventos:
-        body.append(seccion("🗓️ Seminarios, congresos y calls", "Ordenados por fecha del evento",
-                            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(linea(x) for x in eventos)}</table>'))
+    if agenda:
+        nuevos = {x.get("id") for x in eventos}
+        filas = "".join(linea(x) if x.get("id") not in nuevos else
+                        linea(x).replace('</a>', ' <span style="color:#1f6f50;font-size:11px;font-weight:700">NUEVO</span></a>', 1)
+                        for x in agenda)
+        body.append(seccion("🗓️ Agenda: próximos seminarios, congresos y calls", "Los 6 más próximos de tu archivo",
+                            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{filas}</table>'))
     if noticias:
         body.append(seccion("📰 Noticias y divulgación", "", "".join(tarjeta(x, completa=False) for x in noticias)))
+    if ojear:
+        body.append(f'<div style="margin-top:22px;font-size:13px;color:{C["muted"]}">👀 Además, {len(ojear)} '
+                    f'{"ítem tangencial" if len(ojear) == 1 else "ítems tangenciales"} (★2) en la '
+                    f'<a href="{WEB}" style="color:{C["acc"]}">biblioteca web</a>.</div>')
 
     inc = (f'<div style="background:{C["warn_soft"]};color:{C["warn"]};border-radius:8px;padding:8px 12px;'
            f'font-size:12px;margin-top:10px"><b>Incidencias:</b> {e(a.incidencias)}</div>') if a.incidencias.strip() else ""

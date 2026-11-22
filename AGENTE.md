@@ -46,42 +46,67 @@ Una GitHub Action (`.github/workflows/recolectar.yml`) ejecuta cada día a las 0
 
 ## 2. Búsqueda web complementaria (WebSearch / WebFetch)
 
-**Este paso es obligatorio todos los días** (haz al menos 6 búsquedas). Busca en los 4 idiomas lo que las APIs no cubren. Céntrate en lo publicado o anunciado
-en los **últimos 7 días** y descarta lo que ya esté en `data/seen.json` (compara por URL y título).
+**Obligatorio todos los días.** Céntrate en lo publicado o anunciado en los **últimos 7 días** y
+descarta lo que ya esté en `data/seen.json` (compara por URL y título). Haz como mínimo:
 
-- **Seminarios, congresos, webinars, cursos y calls for papers** (próximos 6 meses): ECSS, World
-  Congress of Science and Football, ISPAS, Conference on Complex Systems in Sport, congresos
-  INEFC/FMH Lisboa/Universidades, federaciones (RFEF, FPF, FCF, UEFA Education), Perception & Action,
-  Ecological dynamics / CLA workshops, Athletic Skills Model.
-- **Noticias y divulgación**: blogs y webs de metodología (p.ej. clubes, academias, Barça Innovation
-  Hub, Training Ground Guru, Coaches' Voice), podcasts, entrevistas a autores del área.
-- **Libros** nuevos (Routledge, Human Kinetics, Springer, editoriales en español/portugués).
-- **Tesis doctorales** (TDX, Teseo, RCAAP, repositorios universitarios, Catálogo CAPES).
+1. **4 búsquedas en español, portugués y catalán** (el propietario lo exige y las APIs cubren poco
+   estos idiomas). Usa `site:` en estas fuentes: `dialnet.unirioja.es`, `scielo.org` / `scielo.br`,
+   `recyt.fecyt.es` (RICYDE, Cultura Ciencia y Deporte, Retos), `revista-apunts.com`, `raco.cat`
+   (revistas catalanas), `tdx.cat` y `teseo.educacion.gob.es` (tesis), `rcaap.pt` y
+   `repositorium.sdum.uminho.pt` / `repositorio.ul.pt` (Portugal), `revistas.um.es`, `redalyc.org`.
+   Términos: pedagogía no lineal, dinámica ecológica, juegos reducidos, aprendizaje motor,
+   periodización táctica, sistemas complejos y fútbol (y sus equivalentes en pt/ca).
+2. **3 búsquedas de eventos** (próximos 12 meses): seminarios, congresos, webinars, cursos y calls for
+   papers — ECSS, World Congress of Science and Football, ISPAS, Motor Skills Acquisition Conference,
+   Complex Systems in Sport, congresos INEFC / FMH Lisboa / FCDEF Porto / universidades españolas,
+   federaciones (RFEF, FPF, FCF, UEFA Education), Perception & Action, workshops de CLA / Athletic
+   Skills Model. Comprueba en la web oficial la fecha, el lugar y los plazos (envío de resúmenes,
+   inscripción) y guárdalos en el `summary`.
+3. **2 búsquedas de divulgación**: blogs y webs de metodología (Barça Innovation Hub, Training Ground
+   Guru, Coaches' Voice, clubes y academias), podcasts y entrevistas a autores del área.
+4. Libros nuevos y tesis cuando aparezcan (Routledge, Human Kinetics, Springer, editoriales en
+   español y portugués; TDX, Teseo, RCAAP, CAPES).
 
-Añade cada hallazgo web a la lista de candidatos con el mismo esquema que `candidates.json`
+Añade cada hallazgo web a `data/web_candidates.json` con el mismo esquema que `candidates.json`
 (`type`: `event` | `news` | `book` | `thesis` | `article` | `preprint`) y, para eventos, añade
-`event_date` (AAAA-MM-DD) y `location` (ciudad u "online").
+`event_date` (AAAA-MM-DD, fecha de inicio) y `location` (ciudad u "online").
 
 ## 3. Evaluar y analizar cada candidato
 
-### 3a. Criba
-Para cada candidato decide:
-
-- `relevance` (1–5): 5 = núcleo (CLA, pedagogía no lineal, dinámica ecológica en fútbol); 4 = muy
-  relacionado; 3 = relacionado; 2 = tangencial pero útil; 1 = irrelevante → **descártalo**.
+### 3a. Criba (sé exigente: el email solo debe llevar lo que merece la lectura)
+- `relevance` (1–5):
+  - **5** = núcleo: pedagogía no lineal, CLA, dinámica ecológica, sistemas complejos aplicados a
+    fútbol o deportes colectivos.
+  - **4** = muy relacionado: aprendizaje motor, diseño de tareas, toma de decisiones, juegos
+    reducidos, comportamiento colectivo/táctico, desarrollo del talento en fútbol.
+  - **3** = relacionado: los mismos temas en otros deportes colectivos o en educación física, o
+    fútbol con un enfoque metodológico útil para el entrenador.
+  - **2** = tangencial (otros deportes individuales, carga física sin componente de aprendizaje,
+    gestión, salud…): **solo se guarda en la web, no aparece en el email**.
+  - **1** = sin relación → descártalo (no se guarda).
+- Un trabajo del que solo conoces el título **no puede pasar de 3** (ver 3c).
 - `topics`: subconjunto de `pedagogia_no_lineal`, `sistemas_complejos`, `futbol`, `aprendizaje_talento`.
-- Corrige `type` si hace falta y rellena `lang` (en/es/pt/ca).
+- Corrige `type` si hace falta y rellena siempre `lang` (en/es/pt/ca).
 
-### 3b. Fecha de publicación (obligatoria)
-`date` debe ser la **fecha de publicación** del trabajo (AAAA-MM-DD; si solo se conoce el mes o el
-año, AAAA-MM o AAAA). Si falta o es dudosa, compruébala en la página del artículo (fecha "Published
-online" / "Publicado"). Para preprints, la fecha de depósito; para tesis, la de defensa o depósito;
-para eventos, `event_date` es la fecha del evento y `date` la del anuncio.
+### 3b. Fecha de publicación y novedad real (obligatorio)
+- `date` = fecha de **publicación online** (no la del número impreso de la revista, que puede ser
+  futura). AAAA-MM-DD; si solo se conoce el mes o el año, AAAA-MM o AAAA. Compruébala en la página
+  del artículo ("Published online", "First published", "Publicado"). Nunca dejes una fecha posterior a hoy.
+- **Solo son novedad**: artículos y preprints publicados online en los **últimos 60 días**; libros
+  publicados o anunciados en los últimos 90 días; tesis depositadas o defendidas en los últimos 6
+  meses. Si es más antiguo, **descártalo** aunque sea relevante (márcalo como visto).
+- Para preprints, la fecha de depósito; para eventos, `event_date` es la fecha del evento y `date`
+  la del anuncio.
 
 ### 3c. Ficha de análisis (artículos, preprints, tesis y libros con relevance ≥ 2)
-**Lee la fuente antes de escribir**: abre `fulltext_url` con WebFetch (texto completo si es de
-acceso abierto; si no, la página del artículo o PubMed para el abstract). Para relevance ≥ 3 intenta
-siempre el texto completo; para relevance 2 basta el abstract. Rellena estos campos en español, con
+**Lee la fuente antes de escribir.** Obligatorio según la relevancia:
+- **relevance ≥ 3 y `oa: true`** → lee el **texto completo** (descarga el PDF y usa `pdftotext`, o
+  la versión HTML): métodos, resultados (tablas) y discusión. `analysis_source: texto completo`.
+- **relevance ≥ 3 sin acceso abierto** → abstract completo (página de la editorial, Europe PMC o
+  `https://api.crossref.org/works/<doi>`, campo `abstract`) y busca una versión gratuita legal.
+- **relevance 2** → basta el abstract.
+- Si tras intentarlo solo tienes el título: `analysis_source: solo título`, relevancia máxima 3, y
+  rellena la ficha con "No disponible" salvo lo que conste. Rellena estos campos en español, con
 redacción propia (no copies frases del abstract), concretos y con cifras cuando existan:
 
 - `objective`: pregunta u objetivo del estudio (1 frase).
@@ -156,7 +181,8 @@ python3 scripts/render_email.py --incidencias "texto breve de incidencias o vac�
 
 Crea `data/email.html` y `data/email_subject.txt` con los ítems cuyo `found` sea hoy, ordenados así:
 resumen del día → ⭐ Destacados (relevancia 4–5, ficha completa) → Relevantes (3, ficha completa) →
-Para ojear (2, una línea) → Libros y tesis → Seminarios y congresos → Noticias → pie.
+Libros y tesis → Agenda (los 6 próximos eventos del archivo, marcando los nuevos) → Noticias → pie.
+Los ítems de relevancia 2 no aparecen: solo se cuentan y quedan en la web.
 
 Envía **un** email con la herramienta de Gmail a la dirección indicada en el mensaje de la rutina,
 con el asunto de `data/email_subject.txt` y como cuerpo HTML el contenido **íntegro** de
