@@ -2,7 +2,7 @@ name: Recolectar candidatos
 
 on:
   schedule:
-    - cron: "30 6 * * *"   # 06:30 UTC, antes de la rutina de Claude (07:30 UTC)
+    - cron: "0 5 * * *"   # 05:00 UTC: GitHub suele retrasarlo ~1 h; así termina antes de la rutina de Claude (07:30 UTC)
   workflow_dispatch: {}      # botón "Run workflow" para lanzarlo a mano
 
 permissions:
