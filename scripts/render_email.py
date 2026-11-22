@@ -2,7 +2,7 @@
 """Genera el email diario (data/email.html y data/email_subject.txt) con una plantilla fija.
 
 Lee los ítems de docs/items.json cuyo `found` sea hoy (o --fecha AAAA-MM-DD) y los ordena:
-resumen → Destacados (4-5) → Relevantes (3) → Libros y tesis → Agenda (próximos eventos) → Noticias.
+resumen → Destacados (4-5) → Relevantes (3) → Lecturas de fondo (anteriores, máx. 3) → Libros y tesis → Agenda → Noticias.
 Los ítems tangenciales (★2) no van en el email: solo se cuentan y quedan en la web.
 HTML con tablas y estilos en línea para que se vea bien en Gmail (web y móvil).
 """
@@ -89,6 +89,8 @@ def cabecera_item(it):
     if it.get("type") not in ("news", "event"):
         b += badge("Acceso abierto" if it.get("oa") else "Suscripción",
                    C["acc_soft"] if it.get("oa") else C["warn_soft"], C["acc"] if it.get("oa") else C["warn"])
+    if it.get("background"):
+        b += badge("De fondo" + (f" · {it['cited_by']} citas" if it.get("cited_by") else ""), "#efe9fb", "#5b3fa0")
     for tp in it.get("topics") or []:
         b += badge(TEMAS.get(tp, tp), "#eef0ec", C["muted"])
     return b
@@ -164,12 +166,17 @@ def main():
     items = json.loads((ROOT / "docs" / "items.json").read_text(encoding="utf-8"))
     total = len(items)
     hoy_items = [x for x in items if x.get("found") == a.fecha]
-    doc = [x for x in hoy_items if x.get("type") in ("article", "preprint")]
+    fondo = sorted([x for x in hoy_items if x.get("background") and (x.get("relevance") or 0) >= 4],
+                   key=lambda x: (-(x.get("relevance") or 0), -(x.get("cited_by") or 0)))[:3]
+    ids_fondo = {x.get("id") for x in fondo}
+    hoy_items = [x for x in hoy_items if not x.get("background") or x.get("id") in ids_fondo]
+    doc = [x for x in hoy_items if x.get("type") in ("article", "preprint") and x.get("id") not in ids_fondo]
     rel = lambda x: -(x.get("relevance") or 0)
     dest = sorted([x for x in doc if (x.get("relevance") or 0) >= 4], key=rel)
     medio = [x for x in doc if (x.get("relevance") or 0) == 3]
     ojear = [x for x in doc if (x.get("relevance") or 0) <= 2]
-    libros = sorted([x for x in hoy_items if x.get("type") in ("book", "thesis") and (x.get("relevance") or 0) >= 3], key=rel)
+    libros = sorted([x for x in hoy_items if x.get("type") in ("book", "thesis") and (x.get("relevance") or 0) >= 3
+                     and x.get("id") not in ids_fondo], key=rel)
     ojear += [x for x in hoy_items if x.get("type") in ("book", "thesis", "news") and (x.get("relevance") or 0) <= 2]
     # Agenda permanente: todos los eventos futuros del archivo (no solo los de hoy)
     agenda = sorted([x for x in items if x.get("type") == "event" and (x.get("event_date") or "") >= a.fecha],
@@ -178,7 +185,9 @@ def main():
     noticias = sorted([x for x in hoy_items if x.get("type") == "news" and (x.get("relevance") or 0) >= 3], key=rel)
 
     n = len(hoy_items)
-    subject = (f"📚 Vigilancia científica · {fecha(a.fecha)} · {n} novedades ({len(dest)} destacadas)"
+    n_nuevas = n - len(fondo)
+    subject = (f"📚 Vigilancia científica · {fecha(a.fecha)} · {n_nuevas} novedades ({len(dest)} destacadas)"
+               + (f" + {len(fondo)} de fondo" if fondo else "")
                if n else f"📚 Vigilancia científica · {fecha(a.fecha)} · sin novedades relevantes")
 
     # Resumen del día
@@ -186,9 +195,9 @@ def main():
         f'<td style="padding:0 6px 0 0"><div style="background:{C["card"]};border:1px solid {C["line"]};border-radius:10px;'
         f'padding:8px 12px;text-align:center"><div style="font-size:20px;font-weight:700;color:{C["acc"]}">{v}</div>'
         f'<div style="font-size:11px;color:{C["muted"]}">{k}</div></div></td>'
-        for k, v in [("Destacados", len(dest)), ("Relevantes", len(medio)), ("Libros/tesis", len(libros)),
+        for k, v in [("Destacados", len(dest)), ("Relevantes", len(medio)), ("De fondo", len(fondo)), ("Libros/tesis", len(libros)),
                      ("Eventos nuevos", len(eventos)), ("Noticias", len(noticias)), ("Solo en la web", len(ojear))] if v)
-    indice = "".join(f'<li style="margin:2px 0">{e(x.get("title"))}</li>' for x in dest + medio)
+    indice = "".join(f'<li style="margin:2px 0">{e(x.get("title"))}</li>' for x in dest + medio + fondo)
 
     body = []
     if n:
@@ -207,6 +216,9 @@ def main():
         body.append(seccion("📌 Relevantes",
                             "Relacionados con tus temas · " + ("ficha completa" if completa else "resumen breve (ficha completa en la web)"),
                             "".join(tarjeta(x, completa=completa) for x in medio)))
+    if fondo:
+        body.append(seccion("📚 Lecturas de fondo", "Trabajos anteriores que siguen siendo clave para tu línea · ficha completa",
+                            "".join(tarjeta(x) for x in fondo)))
     if libros:
         body.append(seccion("📘 Libros y tesis", "", "".join(tarjeta(x) for x in libros)))
     if agenda:

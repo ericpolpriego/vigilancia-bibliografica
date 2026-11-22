@@ -174,6 +174,35 @@ def openalex(since):
     return out
 
 
+def fondo(_since):
+    """Lecturas de fondo: cada día un tema y una consulta distintos (rotación), sin límite de fecha,
+    ordenados por citas. Los ya vistos se descartan después, así que cada día salen trabajos nuevos."""
+    out = []
+    key = os.environ.get("OPENALEX_API_KEY", "").strip()
+    topics = list(CONFIG["topics"].items())
+    day = dt.date.today().toordinal()
+    tkey, topic = topics[day % len(topics)]
+    qs = topic["queries"]
+    q = qs[(day // len(topics)) % len(qs)]
+    params = {"filter": f"title_and_abstract.search:{q},language:{'|'.join(CONFIG['languages'])},type:article|review|book|book-chapter|dissertation",
+              "sort": "cited_by_count:desc", "per-page": str(CONFIG.get("fondo_por_dia", 25)),
+              "select": "id,doi,title,display_name,publication_date,type,language,primary_location,authorships,abstract_inverted_index,open_access,cited_by_count"}
+    if key:
+        params["api_key"] = key
+    url = "https://api.openalex.org/works?" + urllib.parse.urlencode(params)
+    js = get_json(url)
+    if js is None and key:
+        params.pop("api_key")
+        js = get_json("https://api.openalex.org/works?" + urllib.parse.urlencode(params))
+    for w in (js or {}).get("results", []):
+        it = oa_item(w, f"fondo:{tkey}:{q}")
+        it["background"] = True
+        it["cited_by"] = w.get("cited_by_count") or 0
+        out.append(it)
+    stats["fondo"] = f"{len(out)} ({topic['label']}: {q})"
+    return out
+
+
 # ---------------------------------------------------------------- Crossref
 def crossref(since):
     jobs = [(j, issn) for j, issns in CONFIG["journals"].items() for issn in issns]
@@ -327,7 +356,7 @@ def main():
     seen = set(json.loads(seen_path.read_text())) if seen_path.exists() else set()
 
     collected = []
-    for fn, arg in [(openalex, since), (crossref, since), (pubmed, args.days), (arxiv, since),
+    for fn, arg in [(openalex, since), (fondo, since), (crossref, since), (pubmed, args.days), (arxiv, since),
                     (sportrxiv, since), (news, since)]:
         try:
             collected += fn(arg)
@@ -340,9 +369,9 @@ def main():
     for it in collected:
         if not it["title"]:
             continue
-        if it["type"] in ("article", "preprint") and len(it["date"]) == 10 and it["date"] < limite:
+        if it["type"] in ("article", "preprint", "thesis") and len(it["date"]) >= 4 and it["date"][:len(limite)] < limite[:len(it["date"])]:
+            it["background"] = True  # anterior: no es novedad, pero puede ser una lectura de fondo valiosa
             descartados_antiguos += 1
-            continue
         keys = {it["id"], f"t:{norm_title(it['title'])}"}
         if (keys | {f"u:{it['url']}"}) & seen:
             continue
@@ -364,7 +393,7 @@ def main():
     from fulltext import enrich
     cands = enrich(cands)
     (DATA / "candidates.json").write_text(json.dumps(cands, ensure_ascii=False, indent=1), encoding="utf-8")
-    stats["descartados_por_antiguedad"] = descartados_antiguos
+    stats["anteriores_marcados_de_fondo"] = descartados_antiguos
     print(json.dumps({"since": since, "por_fuente": stats, "candidatos_nuevos": len(cands),
                       "errores": errors[:20]}, ensure_ascii=False, indent=1))
 

@@ -92,9 +92,18 @@ Añade cada hallazgo web a `data/web_candidates.json` con el mismo esquema que `
 - `date` = fecha de **publicación online** (no la del número impreso de la revista, que puede ser
   futura). AAAA-MM-DD; si solo se conoce el mes o el año, AAAA-MM o AAAA. Compruébala en la página
   del artículo ("Published online", "First published", "Publicado"). Nunca dejes una fecha posterior a hoy.
-- **Solo son novedad**: artículos y preprints publicados online en los **últimos 60 días**; libros
-  publicados o anunciados en los últimos 90 días; tesis depositadas o defendidas en los últimos 6
-  meses. Si es más antiguo, **descártalo** aunque sea relevante (márcalo como visto).
+- **Novedades y lecturas de fondo.** Se aceptan trabajos de cualquier fecha:
+  - **Novedad**: artículos y preprints publicados online en los últimos 60 días; libros publicados
+    o anunciados en los últimos 90 días; tesis de los últimos 6 meses.
+  - **Lectura de fondo** (`background: true`): todo lo anterior. No se descarta, pero se exige más:
+    solo entra en el email si es **relevance 4–5** (trabajos clave, revisiones, marcos teóricos,
+    estudios muy citados de tu línea) y como máximo 3 al día; el resto queda en la web. En `why`
+    explica por qué sigue vigente o qué aporta hoy (p.ej. "base teórica de la metaestabilidad que
+    usan los estudios actuales sobre juegos reducidos"). `fetch.py` ya marca `background` y añade
+    `cited_by` (nº de citas) en los que vienen de la búsqueda de fondo.
+  - Cada día `fetch.py` hace además una **búsqueda de fondo** (tema y consulta rotativos, ordenada por
+    citas); en `data/fetch_report.json` (`por_fuente.fondo`) verás el tema del día. En la búsqueda
+    web también puedes recuperar trabajos anteriores muy relevantes si aparecen.
 - Para preprints, la fecha de depósito; para eventos, `event_date` es la fecha del evento y `date`
   la del anuncio.
 
@@ -181,7 +190,8 @@ python3 scripts/render_email.py --incidencias "texto breve de incidencias o vac�
 
 Crea `data/email.html` y `data/email_subject.txt` con los ítems cuyo `found` sea hoy, ordenados así:
 resumen del día → ⭐ Destacados (relevancia 4–5, ficha completa) → Relevantes (3, ficha completa) →
-Libros y tesis → Agenda (los 6 próximos eventos del archivo, marcando los nuevos) → Noticias → pie.
+Lecturas de fondo (máx. 3, relevancia 4–5) → Libros y tesis → Agenda (los 6 próximos eventos del archivo,
+marcando los nuevos) → Noticias → pie.
 Los ítems de relevancia 2 no aparecen: solo se cuentan y quedan en la web.
 
 Envía **un** email con la herramienta de Gmail a la dirección indicada en el mensaje de la rutina,

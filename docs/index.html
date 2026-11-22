@@ -68,7 +68,7 @@ main{max-width:1080px;margin:auto;padding:12px 16px 60px}
   <select id="type"><option value="">Todos los tipos</option>
     <option value="article">Artículos</option><option value="preprint">Preprints</option>
     <option value="book">Libros</option><option value="thesis">Tesis</option>
-    <option value="event">Seminarios / congresos</option><option value="news">Noticias</option></select>
+    <option value="event">Seminarios / congresos</option><option value="news">Noticias</option><option value="fondo">📚 Lecturas de fondo</option></select>
   <select id="lang"><option value="">Idiomas</option><option>en</option><option>es</option><option>pt</option><option>ca</option></select>
   <select id="rel"><option value="1">★ todos</option><option value="3">★★★+</option><option value="4">★★★★+</option><option value="5">★★★★★</option></select>
   <select id="sort"><option value="found">Orden: recién encontrados</option><option value="pub">Orden: fecha de publicación</option><option value="rel">Orden: relevancia</option></select>
@@ -86,7 +86,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function filtered(){
   const q=$("q").value.toLowerCase().trim(),tp=$("topic").value,ty=$("type").value,lg=$("lang").value,r=+$("rel").value;
-  return items.filter(it=>(!tp||(it.topics||[]).includes(tp))&&(!ty||it.type===ty)&&(!lg||it.lang===lg)&&(it.relevance||0)>=r
+  return items.filter(it=>(!tp||(it.topics||[]).includes(tp))&&(!ty||(ty==="fondo"?it.background:it.type===ty))&&(!lg||it.lang===lg)&&(it.relevance||0)>=r
     &&(!onlyFav||favs[it.id])&&(!onlyUnread||!read[it.id])
     &&(!q||[it.title,(it.authors||[]).join(" "),it.venue,it.summary,it.abstract].join(" ").toLowerCase().includes(q)));
 }
@@ -126,7 +126,7 @@ function render(){
       ${it.why?`<p class="why"><b>Por qué importa:</b> ${esc(it.why)}</p>`:""}
       ${it.practice&&it.practice!=="—"?`<p class="why"><b>Aplicación práctica:</b> ${esc(it.practice)}</p>`:""}
       ${ftLinks(it)}
-      <div class="chips"><span class="chip">${K[it.type]||esc(it.type)}</span>${it.lang?`<span class="chip">${esc(it.lang)}</span>`:""}${(it.topics||[]).map(t=>`<span class="chip t">${T[t]||esc(t)}</span>`).join("")}${it.doi?`<span class="chip">doi:${esc(it.doi)}</span>`:""}</div>
+      <div class="chips">${it.background?`<span class="chip" style="background:#efe9fb;color:#5b3fa0">📚 De fondo${it.cited_by?" · "+it.cited_by+" citas":""}</span>`:""}<span class="chip">${K[it.type]||esc(it.type)}</span>${it.lang?`<span class="chip">${esc(it.lang)}</span>`:""}${(it.topics||[]).map(t=>`<span class="chip t">${T[t]||esc(t)}</span>`).join("")}${it.doi?`<span class="chip">doi:${esc(it.doi)}</span>`:""}</div>
     </article>`;
   }
   $("list").innerHTML=html;

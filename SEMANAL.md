@@ -18,6 +18,7 @@ Trabaja en la raíz del repositorio.
   resultados concretos). Para los 3–5 más relevantes puedes además abrir `fulltext_url` y leer más.
 - Si un campo dice "No disponible" o `analysis_source` es `solo título`, no afirmes nada que no
   conste; dilo con prudencia ("aún sin resultados publicados", "protocolo").
+- Las lecturas de fondo no cuentan como "Lo más destacado" (que es para novedades).
 - Si hay menos de 3 ítems, escribe igualmente un post breve ("semana tranquila").
 
 **Prioridad temática (obligatoria).** El blog es sobre pedagogía no lineal, dinámica ecológica,
@@ -51,8 +52,11 @@ innecesaria. Firma impersonal: «Vigilancia científica».
    ecológica vs. otros marcos), huecos de investigación.
 5. **En el radar** (`<h2>`): lista (`<ul>`) con el resto de ítems relevantes: título en tus palabras,
    diseño y muestra en pocas palabras, y enlace.
-6. **Agenda** (`<h2>`): seminarios, congresos y calls próximos (fecha, lugar, enlace). Omítela si no hay.
-7. **Para llevar al entrenamiento** (`<blockquote>`): 2–3 ideas prácticas concretas.
+6. **Lectura de fondo de la semana** (`<h2>`, opcional): si la semana trajo una lectura de fondo
+   (`background: true`) de relevance 5, preséntala en un párrafo: qué propuso, por qué sigue vigente
+   y cómo conecta con los trabajos nuevos de la semana. Omítela si no hay.
+7. **Agenda** (`<h2>`): seminarios, congresos y calls próximos (fecha, lugar, enlace). Omítela si no hay.
+8. **Para llevar al entrenamiento** (`<blockquote>`): 2–3 ideas prácticas concretas.
 
 **Reglas:**
 - Todo el texto es redacción propia. **No copies los abstracts** ni frases literales largas; como

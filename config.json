@@ -372,5 +372,7 @@
     "jogos reduzidos",
     "táctica",
     "tática"
-  ]
+  ],
+  "fondo_por_dia": 25,
+  "fondo_max_email": 3
 }
