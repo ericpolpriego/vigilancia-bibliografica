@@ -1,16 +1,16 @@
 {
- "since": "2026-11-18",
+ "since": "2026-11-19",
  "por_fuente": {
-  "openalex": 65,
-  "fondo": "9 (Fútbol: entrenamiento y táctica: soccer tactical behaviour positional data)",
-  "crossref": 25,
-  "pubmed": 9,
+  "openalex": 62,
+  "fondo": "25 (Aprendizaje motor y talento: \"youth football\" development learning)",
+  "crossref": 20,
+  "pubmed": 7,
   "arxiv": 0,
   "sportrxiv": 1,
   "news": 2,
-  "anteriores_marcados_de_fondo": 8
+  "anteriores_marcados_de_fondo": 23
  },
- "candidatos_nuevos": 34,
+ "candidatos_nuevos": 39,
  "errores": [
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22nonlinear+pedagogy%22%29+OR+%28%22non-linear+ped -> HTTP Error 401: Unauthorized",
   "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
