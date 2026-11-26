@@ -1,14 +1,14 @@
 {
- "since": "2026-11-21",
+ "since": "2026-11-22",
  "por_fuente": {
-  "openalex": 22,
-  "fondo": "25 (Sistemas complejos en deporte: \"network analysis\" football passing)",
-  "crossref": 14,
-  "pubmed": 5,
+  "openalex": 19,
+  "fondo": "19 (Fútbol: entrenamiento y táctica: football tracking data collective behaviour)",
+  "crossref": 16,
+  "pubmed": 9,
   "arxiv": 0,
   "sportrxiv": 0,
   "news": 5,
-  "anteriores_marcados_de_fondo": 26
+  "anteriores_marcados_de_fondo": 18
  },
  "candidatos_nuevos": 34,
  "errores": [
