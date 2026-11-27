@@ -13,5 +13,46 @@
   "id": "web:e-balonmano-2417",
   "title": "Aproximación ecológica sobre las habilidades para finalizar a gol a través de las tareas de entrenamiento",
   "url": "https://revista-ebalonmano.unex.es/index.php/ebalonmano/article/view/2417"
+ },
+ {
+  "id": "web:msac-2027",
+  "source": "Web",
+  "type": "event",
+  "title": "Motor Skills Acquisition Conference 2027 (6.ª edición)",
+  "authors": [],
+  "venue": "Kisakallio Campus",
+  "date": "2026-11-27",
+  "event_date": "2027-03-17",
+  "location": "Lohja (Finlandia)",
+  "url": "https://www.kolmekampusta.fi/en/events/motor-skills-acquisition-conference-2027",
+  "lang": "en",
+  "relevance": 5,
+  "topics": [
+   "pedagogia_no_lineal",
+   "aprendizaje_talento"
+  ],
+  "summary": "Congreso del 17 al 19 de marzo de 2027 en Lohja con tres ejes: desarrollo motor, aprendizaje/enseñanza/coaching y percepción-decisión-acción en dinámica ecológica. El plazo de resúmenes (250 palabras, en inglés) cierra el 30 de noviembre de 2026, con posible prórroga hasta el 15 de diciembre si se solicita.",
+  "why": "Encaja de lleno con tu línea CLA/dinámica ecológica y el plazo vence en días: decide ya si envías algo.",
+  "found": "2026-11-27"
+ },
+ {
+  "id": "web:wcsf-2027",
+  "source": "Web",
+  "type": "event",
+  "title": "World Congress of Science and Football 2027",
+  "authors": [],
+  "venue": "Liverpool John Moores University",
+  "date": "2026-11-27",
+  "event_date": "2027-06-02",
+  "location": "Liverpool (Reino Unido)",
+  "url": "https://wcsf2027.com/abstract-submissions",
+  "lang": "en",
+  "relevance": 4,
+  "topics": [
+   "futbol"
+  ],
+  "summary": "Congreso del 2 al 4 de junio de 2027 en Liverpool, con ejes que incluyen coaching y pedagogía y desarrollo del talento. Las comunicaciones libres (oral o póster) se abren el 1 de diciembre de 2026 y cierran el 24 de enero de 2027; el plazo de simposios ya terminó.",
+  "why": "Foro de referencia del fútbol científico donde presentar o seguir trabajo sobre pedagogía y talento.",
+  "found": "2026-11-27"
  }
 ]
