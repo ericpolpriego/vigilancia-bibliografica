@@ -1,16 +1,16 @@
 {
- "since": "2026-11-23",
+ "since": "2026-11-24",
  "por_fuente": {
-  "openalex": 21,
-  "fondo": "25 (Aprendizaje motor y talento: \"game-based\" coaching football)",
-  "crossref": 22,
-  "pubmed": 11,
+  "openalex": 23,
+  "fondo": "25 (Pedagogía no lineal / CLA: affordances sport skill)",
+  "crossref": 15,
+  "pubmed": 10,
   "arxiv": 0,
-  "sportrxiv": 0,
-  "news": 6,
-  "anteriores_marcados_de_fondo": 30
+  "sportrxiv": 1,
+  "news": 8,
+  "anteriores_marcados_de_fondo": 28
  },
- "candidatos_nuevos": 37,
+ "candidatos_nuevos": 36,
  "errores": [
   "https://api.openalex.org/works?filter=title_and_abstract.search%3A%28%22nonlinear+pedagogy%22%29+OR+%28%22non-linear+ped -> HTTP Error 401: Unauthorized",
   "OpenAlex: la clave OPENALEX_API_KEY fue rechazada; se usó el acceso sin clave",
